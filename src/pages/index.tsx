@@ -173,7 +173,6 @@ export default function Home() {
             rel="preload"
             as="image"
             href={src}
-            fetchPriority="high"
           />
         ))}
       </Head>
