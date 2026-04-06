@@ -3,7 +3,71 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-ink: #05080a;
+    --color-text: #f3f2ee;
+    --color-muted: rgba(243, 242, 238, 0.7);
+  }
+
   html {
-    @apply text-white;
+    background: var(--color-ink);
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-[var(--color-ink)] text-[var(--color-text)] antialiased;
+    font-family: var(--font-body), sans-serif;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+  }
+
+  html.lenis {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
