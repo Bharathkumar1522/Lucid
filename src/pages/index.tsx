@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Head from "next/head";
 import Image from "next/image";
 import Lenis from "@studio-freight/lenis";
 import { motion } from "framer-motion";
@@ -15,6 +16,15 @@ import BgCharging from "@/../public/bg-charging.jpeg";
 import BgConnectivity from "@/../public/bg-connectivity.jpeg";
 import BgSafety from "@/../public/bg-safety.jpeg";
 import HeroSection from "@/components/HeroSection";
+
+// Pre-resolved image src strings for preload hints
+const IMAGE_SRCS = [
+  BgOverview.src,
+  BgInterior.src,
+  BgCharging.src,
+  BgConnectivity.src,
+  BgSafety.src,
+];
 
 const SECTIONS = [
   {
@@ -154,13 +164,27 @@ export default function Home() {
   }, [disableHeavyAnimations]);
 
   return (
-    <main id="top" className="min-h-screen overflow-x-clip bg-[var(--color-ink)]">
+    <>
+      <Head>
+        {/* Preload all section images so they are decoded and ready before user scrolls */}
+        {IMAGE_SRCS.map((src) => (
+          <link
+            key={src}
+            rel="preload"
+            as="image"
+            href={src}
+            fetchPriority="high"
+          />
+        ))}
+      </Head>
+      <main id="top" className="min-h-screen overflow-x-clip bg-[var(--color-ink)]">
       <BackToTop />
       <HeroSection disableHeavyAnimations={disableHeavyAnimations} />
-      {SECTIONS.map((section) => (
+      {SECTIONS.map((section, index) => (
         <Section
           key={section.id}
           {...section}
+          priority={index < 2}
           disableHeavyAnimations={disableHeavyAnimations}
         />
       ))}
@@ -228,5 +252,6 @@ export default function Home() {
       </div>
       <Footer />
     </main>
+    </>
   );
 }

@@ -14,6 +14,7 @@ type SectionProps = {
   align?: "left" | "right";
   focus?: string;
   disableHeavyAnimations?: boolean;
+  priority?: boolean;
 };
 
 type SectionPanelProps = {
@@ -67,7 +68,7 @@ const SectionPanel = ({
                 {description}
               </p>
               <div className="mt-7 grid gap-3 border-t border-white/30 pt-6 text-sm leading-[1.5] text-white sm:grid-cols-2 sm:text-base lg:grid-cols-3 md:gap-4">
-                {details.map((detail, index) => (
+                {details.map((detail: string, index: number) => (
                   <motion.div
                     key={detail}
                     initial={{ y: 10 }}
@@ -127,6 +128,7 @@ const AnimatedSection = ({
   details,
   align,
   focus = "50% 50%",
+  priority = false,
 }: SectionProps) => {
   const sectionAlign = align ?? "left";
   const overlays = getOverlayClasses(sectionAlign);
@@ -147,7 +149,7 @@ const AnimatedSection = ({
         id={id}
         className="relative isolate z-0 h-[100svh] w-full scroll-mt-24 sticky top-0 overflow-hidden bg-transparent"
       >
-        <motion.div 
+        <motion.div
           className="absolute inset-0 z-0 origin-bottom"
           initial={{ opacity: 0.6, y: "12%", clipPath: "inset(20% 8% -4% 8% round 2.5rem)" }}
           whileInView={{ opacity: 1, y: "0%", clipPath: "inset(3% 3% 3% 3% round 1.5rem)" }}
@@ -165,8 +167,9 @@ const AnimatedSection = ({
               className="object-cover"
               style={{ objectPosition: focus }}
               sizes="100vw"
-              quality={78}
-              priority={false}
+              quality={priority ? 85 : 72}
+              priority={priority}
+              loading={priority ? "eager" : "lazy"}
             />
           </motion.div>
         </motion.div>
@@ -202,6 +205,7 @@ const StaticSection = ({
   details,
   align,
   focus = "50% 50%",
+  priority = false,
 }: SectionProps) => {
   const sectionAlign = align ?? "left";
   const overlays = getOverlayClasses(sectionAlign);
@@ -228,7 +232,8 @@ const StaticSection = ({
               style={{ objectPosition: focus }}
               sizes="100vw"
               quality={72}
-              priority={false}
+              priority={priority}
+              loading={priority ? "eager" : "lazy"}
             />
           </motion.div>
         </motion.div>

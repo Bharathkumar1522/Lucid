@@ -118,7 +118,7 @@ const AnimatedHero = () => {
               loop
               playsInline
               poster="/bg-overview.jpeg"
-              preload="metadata"
+              preload="auto"
             >
               <source src="/hero-video.mp4" type="video/mp4" />
             </video>
