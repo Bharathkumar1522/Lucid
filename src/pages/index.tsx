@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Lenis from "@studio-freight/lenis";
@@ -9,6 +9,7 @@ import { AnimatedText } from "@/components/AnimatedText";
 import ShowcaseSection from "@/components/ShowcaseSection";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
+import Preloader from "@/components/Preloader";
 
 import BgOverview from "@/../public/bg-overview.jpeg";
 import BgInterior from "@/../public/bg-interior.jpeg";
@@ -108,6 +109,22 @@ const SECTIONS = [
 
 export default function Home() {
   const { disableHeavyAnimations } = usePerformanceMode();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Wait for the window (and initial heavy assets) to load fully before unlocking the site
+    const handleLoad = () => {
+      // Small buffer after actual load so React hydration UI isn't jittery
+      setTimeout(() => setIsLoading(false), 400);
+    };
+
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, []);
 
   useEffect(() => {
     if (disableHeavyAnimations) return;
@@ -166,6 +183,7 @@ export default function Home() {
   return (
     <>
       <Head>
+        <title>Lucid Gravity - Next Gen Electric SUV</title>
         {/* Preload all section images so they are decoded and ready before user scrolls */}
         {IMAGE_SRCS.map((src) => (
           <link
@@ -176,9 +194,11 @@ export default function Home() {
           />
         ))}
       </Head>
+      <Preloader isLoading={isLoading} />
+      
       <main id="top" className="min-h-screen overflow-x-clip bg-[var(--color-ink)]">
       <BackToTop />
-      <HeroSection disableHeavyAnimations={disableHeavyAnimations} />
+      <HeroSection disableHeavyAnimations={disableHeavyAnimations} isReady={!isLoading} />
       {SECTIONS.map((section, index) => (
         <Section
           key={section.id}

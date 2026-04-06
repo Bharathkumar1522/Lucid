@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 type HeroSectionProps = {
   disableHeavyAnimations?: boolean;
+  isReady?: boolean;
 };
 
 const HighlightItem: React.FC<{
@@ -23,12 +24,12 @@ const HighlightItem: React.FC<{
   );
 };
 
-const HeroContent = ({ animateHover }: { animateHover: boolean }) => {
+const HeroContent = ({ animateHover, isReady }: { animateHover: boolean, isReady: boolean }) => {
   return (
     <div className="relative z-20 mx-auto flex w-full max-w-[1500px] flex-col justify-end gap-10 px-4 pb-10 pt-24 sm:gap-16 sm:px-5 sm:pb-16 sm:pt-28 md:px-10 xl:px-16 xl:pb-24">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto max-w-[900px] text-center"
       >
@@ -36,10 +37,11 @@ const HeroContent = ({ animateHover }: { animateHover: boolean }) => {
           Lucid Gravity
         </span>
         <AnimatedText
-          el="h1"
-          text="A more cinematic electric SUV."
-          className="mx-auto max-w-[14ch] text-[clamp(2rem,11vw,5.5rem)] font-medium leading-[0.98] tracking-tight text-white [text-shadow:0_4px_40px_rgba(0,0,0,0.6)]"
-          delay={0.3}
+           el="h1"
+           text="A more cinematic electric SUV."
+           className="mx-auto max-w-[14ch] text-[clamp(2rem,11vw,5.5rem)] font-medium leading-[0.98] tracking-tight text-white [text-shadow:0_4px_40px_rgba(0,0,0,0.6)]"
+           delay={0.3}
+           isReady={isReady}
         />
         <p className="mx-auto mt-6 max-w-[34rem] text-sm leading-relaxed text-white/90 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)] sm:text-base">
           Spacious enough for the long weekend, polished enough for the city,
@@ -67,7 +69,7 @@ const HeroContent = ({ animateHover }: { animateHover: boolean }) => {
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto mt-2 grid w-full max-w-[900px] grid-cols-2 gap-y-6 gap-x-2 sm:mt-8 sm:flex sm:flex-row sm:items-center sm:justify-between sm:gap-y-6 md:mt-12"
       >
@@ -83,7 +85,7 @@ const HeroContent = ({ animateHover }: { animateHover: boolean }) => {
   );
 };
 
-const AnimatedHero = () => {
+const AnimatedHero = ({ isReady = true }: { isReady?: boolean }) => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
@@ -130,14 +132,14 @@ const AnimatedHero = () => {
         </div>
         
         <motion.div style={{ y: contentY, opacity: contentOpacity }} className="relative z-10 flex h-full w-full flex-col justify-end">
-          <HeroContent animateHover={animateHover} />
+          <HeroContent animateHover={animateHover} isReady={isReady} />
         </motion.div>
       </section>
     </div>
   );
 };
 
-const StaticHero = () => {
+const StaticHero = ({ isReady = true }: { isReady?: boolean }) => {
   return (
     <div className="relative h-[150svh] w-full z-0">
       <section className="relative isolate z-0 flex h-[100svh] sticky top-0 w-full flex-col justify-between overflow-hidden bg-[#05080a]">
@@ -163,7 +165,7 @@ const StaticHero = () => {
         </div>
         
         <div className="relative z-10 flex h-full w-full flex-col justify-end">
-          <HeroContent animateHover={false} />
+          <HeroContent animateHover={false} isReady={true} />
         </div>
       </section>
     </div>

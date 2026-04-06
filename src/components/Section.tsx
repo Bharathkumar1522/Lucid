@@ -150,9 +150,9 @@ const AnimatedSection = ({
         className="relative isolate z-0 h-[100svh] w-full scroll-mt-24 sticky top-0 overflow-hidden bg-transparent"
       >
         <motion.div
-          className="absolute inset-0 z-0 origin-bottom"
-          initial={{ opacity: 0.6, y: "12%", clipPath: "inset(20% 8% -4% 8% round 2.5rem)" }}
-          whileInView={{ opacity: 1, y: "0%", clipPath: "inset(3% 3% 3% 3% round 1.5rem)" }}
+          className="absolute inset-[3%] z-0 origin-bottom overflow-hidden rounded-[1.5rem] sm:inset-[3%] sm:rounded-[2.2rem] will-change-transform transform-gpu"
+          initial={{ opacity: 0.6, y: "8%", scale: 0.96 }}
+          whileInView={{ opacity: 1, y: "0%", scale: 1 }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: false, amount: 0.15 }}
         >

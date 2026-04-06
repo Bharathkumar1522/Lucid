@@ -7,18 +7,17 @@ type AnimatedTextProps = {
   className?: string;
   once?: boolean;
   delay?: number;
+  isReady?: boolean;
 };
 
 const defaultAnimations: Variants = {
   hidden: {
     opacity: 0,
     y: 16,
-    filter: "blur(6px)",
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: {
       duration: 1.0,
       ease: [0.16, 1, 0.3, 1], // Cinematic ultra-smooth easing
@@ -32,6 +31,7 @@ export const AnimatedText = ({
   className,
   once = false,
   delay = 0,
+  isReady = true,
 }: AnimatedTextProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.2, once });
@@ -44,7 +44,7 @@ export const AnimatedText = ({
       <motion.span
         ref={ref}
         initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
+        animate={isInView && isReady ? "visible" : "hidden"}
         variants={{
           visible: { transition: { staggerChildren: 0.08, delayChildren: delay } },
           hidden: {},
@@ -55,8 +55,7 @@ export const AnimatedText = ({
           <span className="inline-block whitespace-nowrap" key={`${word}-${wordIndex}`}>
             <motion.span
               variants={defaultAnimations}
-              className="inline-block origin-bottom transform-gpu"
-              style={{ willChange: "transform, opacity, filter" }}
+              className="inline-block origin-bottom transform-gpu will-change-transform"
             >
               {word}
             </motion.span>
