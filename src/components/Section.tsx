@@ -169,7 +169,6 @@ const AnimatedSection = ({
               sizes="100vw"
               quality={priority ? 85 : 72}
               priority={priority}
-              loading={priority ? "eager" : "lazy"}
             />
           </motion.div>
         </motion.div>
@@ -233,7 +232,6 @@ const StaticSection = ({
               sizes="100vw"
               quality={72}
               priority={priority}
-              loading={priority ? "eager" : "lazy"}
             />
           </motion.div>
         </motion.div>
