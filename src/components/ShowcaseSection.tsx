@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { AnimatedText } from "./AnimatedText";
 import Image from "next/image";
@@ -9,6 +9,20 @@ import BgCharging from "../../public/bg-charging.jpeg";
 
 const ShowcaseSection = ({ disableHeavyAnimations }: { disableHeavyAnimations?: boolean }) => {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const shouldDisableParallax = disableHeavyAnimations || (hasMounted && isMobile);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -50,15 +64,15 @@ const ShowcaseSection = ({ disableHeavyAnimations }: { disableHeavyAnimations?: 
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 pb-6">
           <motion.div 
-            style={{ y: !disableHeavyAnimations ? y1 : 0 }}
-            initial={!disableHeavyAnimations ? { opacity: 0, scale: 0.95 } : false}
-            whileInView={!disableHeavyAnimations ? { opacity: 1, scale: 1 } : undefined}
+            style={{ y: !shouldDisableParallax ? y1 : 0 }}
+            initial={!shouldDisableParallax ? { opacity: 0, scale: 0.95 } : false}
+            whileInView={!shouldDisableParallax ? { opacity: 1, scale: 1 } : undefined}
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
             className="group relative flex h-[28vh] min-h-[260px] max-h-[460px] flex-col justify-end overflow-hidden rounded-[1.5rem] md:rounded-[1.8rem] shadow-[0_16px_40px_rgba(0,0,0,0.4)]"
           >
             <div className="absolute inset-0 z-0">
-               <Image src={BgPerformance} alt="Aerodynamic Mastery" fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105" sizes="(max-width: 768px) 100vw, 33vw" />
+               <Image src={BgPerformance} alt="Aerodynamic Mastery" fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105" sizes="(max-width: 768px) 100vw, 33vw" placeholder="blur" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/10 group-hover:from-black/80 transition-colors duration-700" />
             </div>
             
@@ -74,15 +88,15 @@ const ShowcaseSection = ({ disableHeavyAnimations }: { disableHeavyAnimations?: 
           </motion.div>
           
           <motion.div 
-            style={{ y: !disableHeavyAnimations ? y2 : 0 }}
-            initial={!disableHeavyAnimations ? { opacity: 0, scale: 0.95 } : false}
-            whileInView={!disableHeavyAnimations ? { opacity: 1, scale: 1 } : undefined}
+            style={{ y: !shouldDisableParallax ? y2 : 0 }}
+            initial={!shouldDisableParallax ? { opacity: 0, scale: 0.95 } : false}
+            whileInView={!shouldDisableParallax ? { opacity: 1, scale: 1 } : undefined}
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
             className="group relative flex h-[28vh] min-h-[260px] max-h-[460px] flex-col justify-end overflow-hidden rounded-[1.5rem] md:rounded-[1.8rem] shadow-[0_16px_40px_rgba(0,0,0,0.4)] lg:mt-10"
           >
             <div className="absolute inset-0 z-0">
-               <Image src={BgDesign} alt="Advanced Architecture" fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 object-right" sizes="(max-width: 768px) 100vw, 33vw" />
+               <Image src={BgDesign} alt="Advanced Architecture" fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 object-right" sizes="(max-width: 768px) 100vw, 33vw" placeholder="blur" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/10 group-hover:from-black/80 transition-colors duration-700" />
             </div>
 
@@ -98,15 +112,15 @@ const ShowcaseSection = ({ disableHeavyAnimations }: { disableHeavyAnimations?: 
           </motion.div>
 
           <motion.div 
-            style={{ y: !disableHeavyAnimations ? y1 : 0 }}
-            initial={!disableHeavyAnimations ? { opacity: 0, scale: 0.95 } : false}
-            whileInView={!disableHeavyAnimations ? { opacity: 1, scale: 1 } : undefined}
+            style={{ y: !shouldDisableParallax ? y1 : 0 }}
+            initial={!shouldDisableParallax ? { opacity: 0, scale: 0.95 } : false}
+            whileInView={!shouldDisableParallax ? { opacity: 1, scale: 1 } : undefined}
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className="group relative flex h-[28vh] min-h-[260px] max-h-[460px] flex-col justify-end overflow-hidden rounded-[1.5rem] md:rounded-[1.8rem] shadow-[0_16px_40px_rgba(0,0,0,0.4)] sm:col-span-2 lg:col-span-1 lg:mt-20"
           >
              <div className="absolute inset-0 z-0">
-               <Image src={BgCharging} alt="Intelligently Driven" fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 object-left" sizes="(max-width: 768px) 100vw, 33vw" />
+               <Image src={BgCharging} alt="Intelligently Driven" fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 object-left" sizes="(max-width: 768px) 100vw, 33vw" placeholder="blur" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/10 group-hover:from-black/80 transition-colors duration-700" />
             </div>
 
